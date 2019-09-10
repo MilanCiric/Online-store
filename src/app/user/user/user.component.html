@@ -1,0 +1,141 @@
+<mat-card *ngIf="!savedChanges else showSavedChangesCard">
+    <form #formData="ngForm">
+        <mat-card-content>
+            <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
+            <!--Errors-->
+            <mat-error *ngIf="error">{{this._language.langDataFinal.user.autorisation}}:
+                {{errorMessage}}</mat-error>
+            <span *ngIf="name.invalid && (name.dirty || name.touched)" class="example-icon">
+                <mat-error *ngIf="name.errors['required']">{{this._language.langDataFinal.user.nameReq}}</mat-error>
+                <mat-error *ngIf="name.errors['minlength']">{{this._language.langDataFinal.user.nameLen5}}</mat-error>
+                <mat-error *ngIf="name.errors['mahlength']">{{this._language.langDataFinal.user.nameLen30}}</mat-error>
+            </span>
+            <span *ngIf="surname.invalid && (surname.dirty || surname.touched)" class="example-icon">
+                <mat-error *ngIf="surname.errors['required']">{{this._language.langDataFinal.user.surReq}}</mat-error>
+                <mat-error *ngIf="surname.errors['minlength']">{{this._language.langDataFinal.user.surLen5}}</mat-error>
+                <mat-error *ngIf="surname.errors['mahlength']">{{this._language.langDataFinal.user.surLen30}}</mat-error>
+            </span>
+            <!--End of Errors-->
+            <mat-grid-list cols="4" rowHeight="70px" [gutterSize]="'25px'">
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <button type="submit" (click)="updateUserInfo(formData.value);" mat-raised-button color="primary"
+                        style="width:50%" [disabled]="!formData.valid">{{this._language.langDataFinal.user.update}}</button>
+                    <span class="example-icon"></span>
+                    <button *ngIf="this.curentUser.photoURL != ''" (click)="this.changePic = !this.changePic"
+                        type="button" mat-raised-button color="primary" style="width:50%">{{this._language.langDataFinal.user.changePic}}</button>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <h2>{{this._language.langDataFinal.user.userPanel}}</h2>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <p *ngIf="!this.curentUser.suspended">{{this._language.langDataFinal.user.status}}: </p> <span class="example-icon"></span>
+                    <h2 *ngIf="!this.curentUser.suspended" style="color:green">{{this._language.langDataFinal.user.active}}</h2>
+                    <p *ngIf="this.curentUser.suspended">{{this._language.langDataFinal.user.status}}: </p> <span class="example-icon"></span>
+                    <h2 *ngIf="this.curentUser.suspended" style="color:red">{{this._language.langDataFinal.user.suspended}}</h2>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="5">
+                    <mat-card
+                        *ngIf="this.curentUser.photoURL != '' && this.changePic == false  && this.curentUser.accessMethod == 'google.com'">
+                        <img [src]="this.curentUser.photoURL" maxwidth="400" height="300" />
+                    </mat-card>
+                    <mat-card
+                        *ngIf="this.curentUser.photoURL != '' && this.changePic == false  && this.curentUser.accessMethod == 'password'">
+                        <img [src]="this.profileUrl | async" maxwidth="400" height="300" />
+                    </mat-card>
+
+                    <mat-card *ngIf="(this.curentUser.photoURL == '' || this.changePic == true)">
+                        <button type="reset" (click)="this.changePic=false;" mat-icon-button color="primary">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                        <fileupload fileUrl="users" docId="{{this.getId}}"></fileupload>
+                    </mat-card>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.name2}}" name="name" #name="ngModel" [ngModel]="this.curentUser?.name"
+                            ngModel required minlength="2" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.name}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.midname2}}" name="midname" #midname="ngModel"
+                            [ngModel]="this.curentUser?.midname" ngModel minlength="5" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.midname}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.surname2}}" name="surname" #surname="ngModel"
+                            [ngModel]="this.curentUser?.surname" required ngModel minlength="5" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.surname}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.country2}}" name="country" #country="ngModel"
+                            [ngModel]="this.curentUser?.country" ngModel minlength="1" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.country}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.state2}}" name="state" #state="ngModel"
+                            [ngModel]="this.curentUser?.state" ngModel minlength="1" maxlength="30">
+                        <mat-hint align="end">{{state}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.city2}}" name="city" #city="ngModel" [ngModel]="this.curentUser?.city"
+                            ngModel minlength="1" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.city}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.zipcode}}" name="zipcode" #zipcode="ngModel"
+                            [ngModel]="this.curentUser?.zipcode" ngModel minlength="1" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.zip}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <input matInput placeholder="{{this._language.langDataFinal.user.telephone}}" name="tel" #tel="ngModel" [ngModel]="this.curentUser?.tel"
+                            ngModel minlength="11" maxlength="30">
+                        <mat-hint align="end">{{this._language.langDataFinal.user.tel}}</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="example-form" style="width:100%">
+                        <mat-label>{{this._language.langDataFinal.user.language}}</mat-label>
+                        <select matNativeControl [(ngModel)]="language" name="language" [ngModel]="this.curentUser?.language" ngModel>
+                            <option value="this.curentUser.language" selected></option>
+                            <option *ngFor="let lang of this._language.languages" [value]="lang.selector">
+                                {{lang.name}}
+                            </option>
+                        </select>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
+
+
+
+           
+
+
+
+        </mat-card-content>
+    </form>
+</mat-card>
+<ng-template #showSavedChangesCard>
+    <mat-error>
+        {{this._language.langDataFinal.user.updated}}
+    </mat-error>
+    <mat-card-actions align="start">
+        <button type="button" (click)="savedChanges=false;routeLoginPage();" mat-raised-button
+            color="primary">{{this._language.langDataFinal.user.close}}</button>
+    </mat-card-actions>
+</ng-template>

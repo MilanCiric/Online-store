@@ -1,0 +1,111 @@
+<div class="accordicon">
+    <br>
+    <mat-error *ngIf="savedChanges">
+        {{this._language.langDataFinal.adminUsers.saved}}
+        <label class="small-spacer"></label>
+        <mat-icon (click)="savedChanges=false;">clear </mat-icon>
+    </mat-error>
+    <br />
+    <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
+    <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenState = true; this.getPic(user._id)" (closed)="panelOpenState = false" class="panel"
+            *ngFor="let user of this.users">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                   <h5>{{this._language.langDataFinal.adminUsers.information}}</h5>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <h3>{{user.displayName}}</h3>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list-item>
+                <mat-grid-list cols="4" rowHeight="50px">
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.name}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.name}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <button mat-raised-button color="primary" style="width:140px;"
+                            (click)="this.promoteToAdmin(user._id)" [disabled]="user.isadmin">
+                            {{this._language.langDataFinal.adminUsers.promoteAdmin}}
+                        </button>
+                        <span class="example-spacer"></span>
+                        <button mat-raised-button color="warn" style="width:140px;"
+                            (click)="this.demoteToAdmin(user._id)" [disabled]="!user.isadmin">
+                            {{this._language.langDataFinal.adminUsers.demote}}
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="6">
+                        <mat-card *ngIf="this.user.photoURL != ''  && this.user.accessMethod == 'google.com'">
+                            <img [src]="this.user.photoURL" style="width:100%; height:100%" />
+                        </mat-card>
+                        <mat-card
+                            *ngIf="this.user.photoURL != '' &&  this.user.accessMethod == 'password'">
+                            <img [src]="this.profileUrl | async" maxwidth="250" height="250" />
+                        </mat-card>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.surname}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.surname}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <button mat-raised-button color="warn" style="width:200px;"
+                            (click)="this.suspendUser(user._id)" [disabled]="user.isadmin ? true : user.suspended">
+                            {{this._language.langDataFinal.adminUsers.suspend}}
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.mail}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.mail}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <button mat-raised-button color="primary" style="width:200px;"
+                            (click)="this.activateUser(user._id)" [disabled]="user.isadmin ? true : !user.suspended">
+                            {{this._language.langDataFinal.adminUsers.activate}}
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.tel}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.tel}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h2 *ngIf="user.isadmin">{{this._language.langDataFinal.adminUsers.admin}}</h2>
+                        <h2 *ngIf="!user.isadmin">{{this._language.langDataFinal.adminUsers.common}}</h2>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.country}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.country}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h2 *ngIf="user.suspended">{{this._language.langDataFinal.adminUsers.suspendStatus}}</h2>
+                        <h2 *ngIf="!user.suspended">{{this._language.langDataFinal.adminUsers.activeStatus}}</h2>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <h3>{{this._language.langDataFinal.adminUsers.city}}:</h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{user.city}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <div *ngIf="user.suspended" class="suspended"></div>
+                        <div *ngIf="!user.suspended" class="activated"></div>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-list-item>
+
+
+        </mat-expansion-panel>
+    </mat-accordion>
+    <br>
+</div>

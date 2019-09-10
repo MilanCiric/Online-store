@@ -1,0 +1,15 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    height:  25px;
+    margin-top:-25px;
+    width: 99%;
+    clear: both;
+    background-color: rgb(170, 190, 190);
+    border-radius: 10px;
+  }
+  .footerText{
+      margin:auto;
+      font-family: 'Times New Roman', Times, serif;
+      width: 23%;
+  }

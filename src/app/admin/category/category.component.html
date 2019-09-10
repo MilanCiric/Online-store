@@ -1,0 +1,64 @@
+<mat-card class="matCard">
+    <div class="example-container">
+        <form #addDataForm="ngForm" (ngSubmit)="setData('category',addDataForm.value);this.addDataForm.reset();"
+            novalidate>
+            <div>
+                <mat-card-actions align="start">
+                    <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">
+                        {{this._language.langDataFinal.category.addCategory}}
+                    </button>
+                </mat-card-actions>
+                <mat-form-field>
+                    <input matInput placeholder="{{this._language.langDataFinal.category.category}}" name="name" id="name" ngModel required minlength="2">
+                    <mat-hint align="end">{{this._language.langDataFinal.category.categoryEg}}</mat-hint>
+                </mat-form-field>
+                <span class="example-icon"></span>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="category-container">
+        <mat-grid-list cols="6" rowHeight="25px" [gutterSize]="'15px'">
+            <mat-grid-tile *ngFor="let tile of tiles" [colspan]=1 [rowspan]=1 class="category">
+                <div class="cat" (click)="rename('category',tile._id,tile.name)">{{tile.name}}</div>
+                <button type="reset" (click)="delete('category',tile._id)" mat-icon-button color="accent">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</mat-card>
+<br />
+<mat-card class="matCard">
+    <div class="example-container">
+        <form #addDataForm2="ngForm" (ngSubmit)="setData('manufacturer',addDataForm2.value);this.addDataForm2.reset();"
+            novalidate>
+            <div>
+                <mat-card-actions align="start">
+                    <button type="submit" mat-raised-button [disabled]="!addDataForm2.valid" color="primary">
+                        {{this._language.langDataFinal.category.addManufacturer}}
+                    </button>
+                </mat-card-actions>
+                <mat-form-field>
+                    <input matInput placeholder="{{this._language.langDataFinal.category.manufaturer}}" name="name" id="name" ngModel required minlength="2">
+                    <mat-hint align="end">{{this._language.langDataFinal.category.manufacturerEg}}</mat-hint>
+                </mat-form-field>
+                <span class="example-icon"></span>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="category-container">
+        <mat-grid-list cols="6" rowHeight="25px" [gutterSize]="'15px'">
+            <mat-grid-tile *ngFor="let tile of tiles2" [colspan]=1 [rowspan]=1 class="category">
+                <div class="cat" (click)="rename('manufacturer',tile._id,tile.name)">{{tile.name}}</div>
+                <button type="reset" (click)="delete('manufacturer',tile._id)" mat-icon-button color="accent">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</mat-card>
+<br />

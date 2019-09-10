@@ -1,0 +1,116 @@
+<mat-card>
+    <mat-card-actions align="start">
+        <form #searchForm="ngForm">
+            <mat-form-field class="example-form">
+                <input matInput type="text" placeholder="{{this._language.langDataFinal.product.search}}"
+                    #search="ngModel" ngModel id="search" name="search" minlength="3" maxlength="50"
+                    (keyup.enter)="getFilterData(search.value)">
+            </mat-form-field>
+            <button type="submit" (keyup.enter)="getFilterData(search.value)" hidden></button>
+            <span matTooltip="Search All">
+                <mat-icon color="primary" (click)="clearSearchResults();toggle=true;cart=false">clear</mat-icon>
+            </span>
+            <span class="small-spacer"></span>
+            <span matTooltip="{{this._language.langDataFinal.product.searchTooltip}}">
+                <mat-icon color="primary"
+                    (click)="getFilterData(search.value);this.searchForm.reset();toggle=true;cart=false;showSearchResults=true">
+                    search</mat-icon>
+            </span>
+        </form>
+    </mat-card-actions>
+    <mat-card-content *ngIf="toggle else (cart==true) ? showCart :showProductDetails">
+        <mat-error *ngIf="savedChanges" class="centar">
+            {{this._language.langDataFinal.product.cartUpdated}}
+            <mat-icon (click)="savedChanges=!savedChanges" color="primary">close</mat-icon>
+            <span class="med-spacer"></span>
+        </mat-error>
+        <mat-grid-list *ngIf="showSearchResults" cols="4" rowHeight="330px" [gutterSize]="'15px'">
+            <mat-grid-tile [colspan]="1" [rowspan]="1" *ngFor="let item of searchedMembers"
+                (click)="showDetails(item);toggle=!toggle">
+
+                <mat-card class="example-card" style="background-color: rgb(170,200,200);">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span matTooltip="{{this._language.langDataFinal.product.matTooltip}}">
+                                {{item.category}} <mat-icon mat-list-icon>pageview</mat-icon>
+                            </span>
+                        </mat-card-title>
+                        <mat-card-subtitle> {{item.category}} / {{item.lname}}</mat-card-subtitle>
+                    </mat-card-header>
+                        <img [src]="this.searchPhotoesURL[item.id].path | async" maxwidth="200" height="200" style="align-content:center"/>
+                </mat-card>
+
+            </mat-grid-tile>
+        </mat-grid-list>
+        <br /><br />
+    </mat-card-content>
+    <ng-template #showProductDetails>
+        <mat-error *ngIf="savedChanges" class="centar">
+            {{this._language.langDataFinal.product.cartUpdated}}
+            <mat-icon (click)="savedChanges=!savedChanges" color="primary">close</mat-icon>
+            <span class="med-spacer"></span>
+        </mat-error>
+        <div class="product">
+            <mat-toolbar class="display">
+                <span class="example-spacer"></span>
+                <b>{{myDocData.lname}}</b>
+                <span class="example-spacer"></span>
+                <span matTooltip="{{this._language.langDataFinal.product.matTooltip2}}">
+                    <mat-icon color="primary" (click)="toggle=!toggle">backspace</mat-icon>
+                </span>
+            </mat-toolbar>
+            <mat-grid-list cols="2" rowHeight="450px">
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <img [src]="photoURL | async" maxwidth="450" height="350" />
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-list>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.category}}</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.category}}
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.scategory}}</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.scategory}}</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.color}}</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.color}}</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.size}}</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.size}} inch</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.discount}}:</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.discount}} %</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.price}}:</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.price}} RDS</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item><b>{{this._language.langDataFinal.product.shipping}}:</b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.shipping}} RDS</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item *ngIf="myDocData.discount>0">
+                            <b>{{this._language.langDataFinal.product.priceWithDiscount}} </b>
+                            <span class="example-spacer"></span>
+                            {{myDocData.total}} RDS
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </mat-list>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </ng-template>
+</mat-card>
+<ng-template #showWarning>
+    <mat-card>
+        <mat-card-content>
+            <h3 style="color:red">{{this._language.langDataFinal.product.problem}}</h3>
+        </mat-card-content>
+    </mat-card>
+</ng-template>

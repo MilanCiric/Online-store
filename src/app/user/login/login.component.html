@@ -1,0 +1,120 @@
+<header pageTitle="{{this._language.langDataFinal.login.pageTitle}}" iconTitle="account_circle" helpTitle="Settingspagehelp"></header>
+<mat-grid-list cols="4" rowHeight="650px" [gutterSize]="'15px'">
+    <mat-grid-tile [colspan]="3" [rowspan]="1">
+        <mat-card style="margin:auto;">
+            <mat-card-content>
+                <slideshow #slideshow [imageUrls]="imageUrls" [height]="height" [minHeight]="minHeight"
+                    [arrowSize]="arrowSize" [showArrows]="showArrows" [disableSwiping]="disableSwiping"
+                    [autoPlay]="autoPlay" [stopAutoPlayOnSlide]="stopAutoPlayOnSlide" [debug]="debug"
+                    [backgroundSize]="backgroundSize" [backgroundPosition]="backgroundPosition"
+                    [backgroundRepeat]="backgroundRepeat" [showDots]="showDots" [dotColor]="dotColor"
+                    [showCaptions]="showCaptions" [captionColor]="captionColor" [captionBackground]="captionBackground"
+                    [lazyLoad]="lazyLoad" [hideOnNoSlides]="hideOnNoSlides" [fullscreen]="fullscreen">
+                </slideshow>
+            </mat-card-content>
+
+
+
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <mat-card style="margin:auto;">
+
+            <div *ngIf="afAuth.user | async as user; else  (!singUpForm)?showLogin:showSingup">
+                <mat-chip-list aria-label="Fish selection">
+                    <mat-chip color="primary" selected routerLink="/product">{{this._language.langDataFinal.login.continue}}</mat-chip>
+                    <mat-chip color="accent" selected (click)="logout()">{{this._language.langDataFinal.login.logout}}</mat-chip>
+                </mat-chip-list>
+            </div>
+            <ng-template #showLogin>
+                <mat-card-content>
+                    <form #formData="ngForm" (ngSubmit)="login('email',formData.value)" class="example-form">
+                        <mat-card-actions *ngIf="error">
+                            <mat-error>{{this._language.langDataFinal.login.credentials}}: {{errorMessage}}
+                            </mat-error>
+                        </mat-card-actions>
+                        <mat-error *ngIf="dataLoading">
+                            <mat-progress-bar mode="indeterminate" color="primary" [value]="15"></mat-progress-bar>
+                        </mat-error>
+                        <mat-error *ngIf="brokenNetwork" class="label-error">{{this._language.langDataFinal.login.netError}}r</mat-error>
+                        <mat-card-actions align="start">
+                            <button type="submit" [disabled]="!formData.valid" mat-raised-button color="primary">
+                                {{this._language.langDataFinal.login.login}}
+                            </button>
+                            <button type="button" routerLink="/aboutus" mat-raised-button color="warn">
+                                {{this._language.langDataFinal.login.guest}}
+                            </button>
+                            <button type="button" mat-raised-button color="primary" (click)="singUpForm=true">
+                                {{this._language.langDataFinal.login.join}}
+                            </button>
+                        </mat-card-actions>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="{{this._language.langDataFinal.login.email}}" name="email" #email="ngModel" ngModel required email>
+                        </mat-form-field>
+                        <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">{{this._language.langDataFinal.login.validMail}}
+                        </mat-error>
+                        <mat-form-field class="example-full-width">
+                            <input matInput type="password" placeholder="{{this._language.langDataFinal.login.password}}" name="password"
+                                #password="ngModel" ngModel required minlength="5" maxlength="30">
+                        </mat-form-field>
+                        <span *ngIf="password.invalid && (password.dirty || pasword.touched)">
+                            <mat-error *ngIf="password.errors['required']">{{this._language.langDataFinal.login.passReq}}</mat-error>
+                            <mat-error *ngIf="password.errors['minlength']">{{this._language.langDataFinal.login.passLen5}}
+                            </mat-error>
+                            <mat-error *ngIf="password.errors['maxlength']">{{this._language.langDataFinal.login.passLen30}}
+                            </mat-error>
+                        </span>
+                    </form>
+                </mat-card-content>
+                <mat-card-content>
+                    <mat-chip-list class="mat-chip-list-stacked" style="margin-left: 170px">
+                        <mat-chip color="primary" selected="true" (click)="login('FB')">{{this._language.langDataFinal.login.fb}}</mat-chip>
+                        <mat-chip color="accent" selected="true" (click)="login('GOOGLE')">{{this._language.langDataFinal.login.google}}</mat-chip>
+                    </mat-chip-list>
+                </mat-card-content>
+            </ng-template>
+            <ng-template #showSingup>
+                <mat-card-content>
+                    <form #formData2="ngForm" (ngSubmit)="singUp(formData2.value);singUpForm=false;"
+                        class="example-form">
+                        <mat-card-actions *ngIf="error">
+                            <mat-error>{{this._language.langDataFinal.login.singUpUnavailable}}: {{errorMessage}}
+                            </mat-error>
+                        </mat-card-actions>
+                        <mat-error *ngIf="dataLoading">
+                            <mat-progress-bar mode="indeterminate" color="primary" [value]="15"></mat-progress-bar>
+                        </mat-error>
+                        <mat-error *ngIf="brokenNetwork" class="label-error">{{this._language.langDataFinal.login.netError}}</mat-error>
+                        <mat-card-actions align="start">
+                            <button type="submit" [disabled]="!formData2.valid" mat-raised-button
+                                color="primary">{{this._language.langDataFinal.login.singup}}</button>
+                            <button type="button" routerLink="/aboutus" mat-raised-button color="warn">
+                                {{this._language.langDataFinal.login.guest}}
+                            </button>
+
+                        </mat-card-actions>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="{{this._language.langDataFinal.login.email}}" name="email" #email="ngModel" ngModel required email>
+                        </mat-form-field>
+                        <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">{{this._language.langDataFinal.login.validMail}}
+                        </mat-error>
+                        <mat-form-field class="example-full-width">
+                            <input matInput type="password" placeholder="{{this._language.langDataFinal.login.password}}" name="password"
+                                #password="ngModel" ngModel required minlength="5" maxlength="30">
+                        </mat-form-field>
+                        <span *ngIf="password.invalid && (password.dirty || pasword.touched)">
+                            <mat-error *ngIf="password.errors['required']">{{this._language.langDataFinal.login.passReq}}</mat-error>
+                            <mat-error *ngIf="password.errors['minlength']">{{this._language.langDataFinal.login.pasLen5}}
+                            </mat-error>
+                            <mat-error *ngIf="password.errors['maxlength']">{{this._language.langDataFinal.login.passLen30}}
+                            </mat-error>
+                        </span>
+                    </form>
+                    <button type="button" mat-raised-button color="primary" (click)="singUpForm=false">
+                        {{this._language.langDataFinal.login.back}}
+                    </button>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

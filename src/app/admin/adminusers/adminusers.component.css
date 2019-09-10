@@ -1,0 +1,31 @@
+.accordicon{
+    width:80%;
+    height:100%;
+    margin: auto;
+}
+.panel{
+    background-color: rgb(190, 220, 220); 
+    border-radius: 10px;
+    border: 1px solid #eeeeee;
+}
+mat-card{
+    background-color: rgb(170,200,200);
+}
+.suspended{
+    height:50px; 
+    width:50px; 
+    background-color: red;
+    border-radius: 25px;
+    text-align: center;
+    position: absolute;
+    vertical-align: middle;
+}
+.activated{
+    height:50px; 
+    width:50px; 
+    background-color: green;
+    border-radius: 25px;
+    text-align: center;
+    position: absolute;
+    vertical-align: middle;
+}

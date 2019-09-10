@@ -1,0 +1,38 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .example-container > * {
+    width: 99%;
+  }
+  .mat-form-field {
+    font-size: 14px;
+    width: 30%;
+}
+.category{
+  background-color: rgb(170, 200, 200);
+  border: 1px solid rgb(240,240,240);
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px gray;
+}
+.category-container{
+  width:90%;
+  margin:auto;
+}
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+.cat{
+  width: 95%;
+  text-align: center;
+}
+.matCard{
+  background-color: rgb(190, 220, 220); 
+  border-radius: 15px;
+  border: 1px solid #eeeeee;
+}

@@ -1,0 +1,112 @@
+<mat-grid-list cols="2" [gutterSize]="10" rowHeight="600px">
+    <mat-grid-tile>
+        <mat-card class="administrative">
+            <mat-card-header>
+                <mat-card-title>
+                    <h2>{{this._language.langDataFinal.administratives.discounts}}</h2>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <h4>{{this._language.langDataFinal.administratives.discountDescription}}</h4>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <form #setDiscountCategory="ngForm"
+                    (ngSubmit)="setDiscount('discounts',setDiscountCategory.value,'category');" novalidate>
+                    <mat-card-actions align="start">
+                        <button type="submit" mat-raised-button [disabled]="!setDataForm.valid" color="primary">
+                           {{this._language.langDataFinal.administratives.saved1}}
+                        </button>
+                    </mat-card-actions>
+                    <mat-form-field>
+                        <mat-label>{{this._language.langDataFinal.administratives.category}}</mat-label>
+                        <select matNativeControl [(ngModel)]="selectedCategory" name="selectedCategory">
+                            <option value="" selected></option>
+                            <option *ngFor="let cat of this.category" [value]="cat.name">
+                                {{cat.name}}
+                            </option>
+                        </select>
+                    </mat-form-field>
+                    <span class="example-icon"></span>
+                    <mat-form-field style="width:40%">
+                        <input matInput placeholder="{{this._language.langDataFinal.administratives.category2}}" name="discountCategory"
+                            id="discountCategory" [ngModel]="discountCategory">
+                        <mat-hint align="end">{{this._language.langDataFinal.administratives.category3}}</mat-hint>
+                    </mat-form-field>
+                </form>
+                <form #setDiscountManufacturer="ngForm"
+                    (ngSubmit)="setDiscount('discounts',setDiscountManufacturer.value,'manufacturer');" novalidate>
+                    <mat-card-actions align="start">
+                        <button type="submit" mat-raised-button [disabled]="!setDataForm.valid" color="primary">
+                            {{this._language.langDataFinal.administratives.saved2}}
+                        </button>
+                    </mat-card-actions>
+                    <mat-form-field>
+                        <mat-label>{{this._language.langDataFinal.administratives.manufacturer}}</mat-label>
+                        <select matNativeControl [(ngModel)]="selectedManufacturer" name="selectedManufacturer">
+                            <option value="" selected></option>
+                            <option *ngFor="let man of this.manufacturer" [value]="man.name">
+                                {{man.name}}
+                            </option>
+                        </select>
+                    </mat-form-field>
+                    <span class="example-icon"></span>
+                    <mat-form-field style="width:40%">
+                        <input matInput placeholder="{{this._language.langDataFinal.administratives.manufacturer2}}" name="discountManufacturer"
+                            id="discountManufacturer" [ngModel]="discountManufacturer">
+                        <mat-hint align="end">{{this._language.langDataFinal.administratives.manufacturer3}}</mat-hint>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-grid-list cols="4" [gutterSize]="15" rowHeight="30px">
+                <mat-grid-tile class="discount" *ngFor="let el of this.categoryKeys" (click)="deleteDiscount(el,'category')">
+                   {{el}}: {{this.discountsCategory[el]}}%
+                </mat-grid-tile>
+                <mat-grid-tile class="discount" *ngFor="let el of this.manufacturerKeys" (click)="deleteDiscount(el,'manufacturer')">
+                    {{el}}: {{this.discountsManufacturer[el]}}%
+                 </mat-grid-tile>
+            </mat-grid-list>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card class="administrative">
+            <mat-card-header>
+                <mat-card-title>
+                    <h2>{{this._language.langDataFinal.administratives.administrative}}</h2>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <h4>{{this._language.langDataFinal.administratives.administrative2}}</h4>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <form #setDataForm="ngForm" (ngSubmit)="setAdministrative('administrative',setDataForm.value);"
+                    novalidate>
+
+                    <mat-card-actions align="start">
+                        <button type="submit" mat-raised-button [disabled]="!setDataForm.valid" color="primary">
+                            {{this._language.langDataFinal.administratives.saved3}}
+                        </button>
+                    </mat-card-actions>
+
+                    <mat-form-field style="width:40%">
+                        <input matInput placeholder="{{this._language.langDataFinal.administratives.euro}}" name="euro" id="euro" [ngModel]="administrativeData.euro"
+                            required minlength="1">
+                        <mat-hint align="end">{{this._language.langDataFinal.administratives.euro2}}</mat-hint>
+                    </mat-form-field>
+                    <span class="example-icon"></span>
+                    <span class="example-icon"></span>
+                    <mat-form-field style="width:40%">
+                        <input matInput placeholder="{{this._language.langDataFinal.administratives.pdv}}" name="pdv" id="pdv" [ngModel]="administrativeData.pdv"
+                            required minlength="1">
+                        <mat-hint align="end">{{this._language.langDataFinal.administratives.pdv2}}</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field style="width:40%">
+                        <input matInput placeholder="{{this._language.langDataFinal.administratives.usd}}" name="usd" id="usd" [ngModel]="administrativeData.usd"
+                            required minlength="1">
+                        <mat-hint align="end">{{this._language.langDataFinal.administratives.usd2}}</mat-hint>
+                    </mat-form-field>
+                    <span class="example-icon"></span>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

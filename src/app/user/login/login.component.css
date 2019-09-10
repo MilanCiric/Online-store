@@ -1,0 +1,24 @@
+mat-chip {
+    max-width: 200px;
+  }
+  .example-button-row button,
+  .example-button-row a {
+    margin-right: 8px;
+  }
+mat-card {
+    margin:auto;
+    top: 10px;
+    border-radius: 15px;
+    background-color: rgb(170, 200, 200);
+    width:100%;
+ }
+ .example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > * {
+  width: 100%;
+}
+
+

@@ -1,0 +1,89 @@
+<div class="accordicon">
+    <br>
+    <mat-accordion >
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+            *ngFor="let el of cartKeys" class="panel">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{cartMembers[el].username}}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{this._language.langDataFinal.adminOrders.content}} {{cartMembers[el].username}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.product}}</b><span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.counts}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.price}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.discount}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.shipping}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.total}}</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-list-item>
+            <mat-list-item *ngFor="let item of cartMembers[el].listOfProducts">
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        {{item.lname}}
+                        <span class="example-spacer"></span>
+                        
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.count}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.price}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.discount}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.shipping}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{item.total}} RSD</b>
+                    </mat-grid-tile>
+                    <mat-divider></mat-divider>
+                </mat-grid-list>
+                
+            </mat-list-item>
+            <mat-divider style="border:1px solid black"></mat-divider>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.adminOrders.grandTotalPDV}}</b><span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{cartMembers[el].grandTotal+cartMembers[el].grandTotal*this.administrativeData.pdv}} RSD</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-list-item>
+            <mat-chip-list>
+                <mat-chip color="accent" selected (click)="deleteOrder(cartMembers[el]._id);">
+                    {{this._language.langDataFinal.adminOrders.delete}}
+                </mat-chip>
+            </mat-chip-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <br>
+</div>

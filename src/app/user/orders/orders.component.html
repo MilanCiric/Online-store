@@ -1,0 +1,85 @@
+
+<div class="accordicon">
+    <br>
+    <mat-accordion >
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+            *ngFor="let el of cartMembers" class="panel">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{el.username}}
+                </mat-panel-title>
+                <mat-panel-description>
+                        {{this._language.langDataFinal.orders.content}} {{el.username}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.productName}}</b>
+                        <span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.counts}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.price}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.discount}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.shipping}}</b>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.total}}</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-list-item>
+            <mat-list-item *ngFor="let item of el.listOfProducts">
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        {{item.lname}}
+                        <span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.count}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.price}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.discount}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.shipping}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{item.total}} RSD</b>
+                    </mat-grid-tile>
+                    <mat-divider></mat-divider>
+                </mat-grid-list>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.orders.grandTotal}}</b>
+                        <span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{el.grandTotal + el.grandTotal*20/100}} RSD</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-list-item>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <br>
+</div>

@@ -1,0 +1,33 @@
+<mat-toolbar class="header">
+    <button mat-mini-fab [color]="userColor" [matMenuTriggerFor]="navMenu" >
+        <mat-icon>dashboard</mat-icon>
+    </button>
+    <span class="example-icon"></span>
+    <mat-icon [color]="userColor">{{iconTitle}}</mat-icon>
+    <span class="example-icon" i18n></span>
+    {{pageTitle}}
+    <span class="example-spacer"></span>
+    <mat-icon [color]="userColor" [matMenuTriggerFor]="languageMenu">language</mat-icon>
+    <span class="example-icon"></span>
+    <mat-icon [color]="userColor" routerLink="/login">settings_power</mat-icon>
+    <span class="example-icon"></span>
+    <mat-icon [color]="userColor" routerLink="/product">shop</mat-icon>
+    <span class="example-icon"></span>
+    <mat-icon [color]="userColor" routerLink="/settings">account_box</mat-icon>
+    <span class="example-icon"></span>
+    <mat-icon matBadge="{{counter}}" matBadgePosition="before" matBadgeColor="accent" [color]="userColor" routerLink="/cart">shopping_cart</mat-icon>
+    <span class="example-icon"></span>
+    <mat-icon [color]="userColor" routerLink='/help'>help_outline</mat-icon>
+    <span class="example-icon"></span>
+   
+
+    <mat-menu #navMenu="matMenu" class="matMenu" style="background-color: rgb(190,220,220);">
+        <a href="{{ConfigData.fblink}}" target="_blank" ><button mat-menu-item style="background-color: rgb(190,220,220);"><mat-icon svgIcon="facebook"></mat-icon>Our facebook page</button></a> 
+        <button mat-menu-item routerLink="/aboutus" style="background-color: rgb(190,220,220);"><mat-icon>info</mat-icon>About us</button>
+        <button mat-menu-item routerLink="/settings" style="background-color: rgb(190,220,220);"><mat-icon>settings</mat-icon>Settings</button>
+        <button mat-menu-item routerLink="/admin"*ngIf="this.adminAccess" style="background-color: rgb(190,220,220);"><mat-icon>build</mat-icon>Admin access</button>
+    </mat-menu>
+    <mat-menu #languageMenu="matMenu" class="matMenu" style="background-color: rgb(190,220,220);"> 
+        <button mat-menu-item *ngFor="let item of this._language.languages" style="background-color: rgb(190,220,220);" (click)="this.changeLanguage(item.selector);">{{item.name}}</button>
+    </mat-menu>
+</mat-toolbar>

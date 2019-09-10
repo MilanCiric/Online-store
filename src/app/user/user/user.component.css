@@ -1,0 +1,35 @@
+mat-card{
+    background-color: rgb(190,220,220);
+}
+table {
+    width: 100%;
+}
+.mat-form-field {
+    font-size: 14px;
+    width: 30%;
+}
+td, th {
+    width: 25%;
+}
+.example-icon {
+    padding: 0 14px;
+}
+.example-container{
+    border-radius: 15px;
+}
+  
+.example-spacer {
+    flex: 1 1 auto;
+}
+.display{
+	margin: 0px !important;
+	padding: 5px !important;
+    border-radius: 15px;
+    border:solid 1px rgb(160,160,160);
+    background-color: rgb(190,220,220);
+}
+
+  .example-panel-green.mat-select-panel {
+    background: rgba(200, 255, 200, 0.5);
+  }
+  

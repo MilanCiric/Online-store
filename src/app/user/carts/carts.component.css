@@ -1,0 +1,27 @@
+.display{
+	margin: 0px !important;
+	padding: 5px !important;
+    border-radius: 15px;
+	border:solid 1px rgb(160,160,160);
+}
+
+  .example-panel-green.mat-select-panel {
+    background: rgba(200, 255, 200, 0.5);
+  }
+  .example-icon {
+    padding: 0 14px;
+}
+  
+.example-spacer {
+    flex: 1 1 auto;
+}
+.centar{
+    text-align: center;
+}
+.matCard{
+  background-color: rgb(190,220,220);
+  font-style: oblique black;
+  color: black;
+  border-radius: 10px;
+  border: 1px solid rgb(240,240,240);
+}

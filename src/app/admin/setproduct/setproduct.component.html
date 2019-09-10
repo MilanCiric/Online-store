@@ -1,0 +1,538 @@
+<mat-card style="background-color: rgb(190, 220, 220);">
+    <mat-card-content>
+        <div
+            *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
+        </div>
+        <!-- search page here-->
+        <form #searchFromData="ngForm" class="example-form" *ngIf="toggleField=='searchMode'">
+            <mat-card-actions>
+                <mat-chip-list>
+                    <mat-chip color="primary" selected matTooltip="{{this._language.langDataFinal.setProduct.search}}"
+                        (click)="toggle('searchMode');getFilterData({category:selectedCategory, name:selectedManufacturer});showResults=true;showHostSelfieSearch=false"
+                        [disabled]="(!selectedCategory && !selectedManufacturer)">{{this._language.langDataFinal.setProduct.search}}</mat-chip>
+                    <span class="example-icon"></span>
+                    <span class="example-icon"></span>
+                    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip1}}">
+                        <mat-icon color="primary" (click)="toggle('addMode');dataSourceSearch=null;">add</mat-icon>
+                    </span>
+                    <span class="example-icon"></span>
+                    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip2}}">
+                        <mat-icon color="primary"
+                            (click)="toggle('resMode');getData();dataSourceSearch=null;showResults=false">cached
+                        </mat-icon>
+                    </span>
+                </mat-chip-list>
+            </mat-card-actions>
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.category}}</mat-label>
+                <select matNativeControl [(ngModel)]="selectedCategory" name="selectedCategory">
+                    <option value="" selected></option>
+                    <option *ngFor="let cat of searchCategory" [value]="cat.name">
+                        {{cat.name}}
+                    </option>
+                </select>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.manufacturer}}</mat-label>
+                <select matNativeControl [(ngModel)]="selectedManufacturer" name="selectedManufacturer">
+                    <option value="" selected></option>
+                    <option *ngFor="let man of SearchManufacturer" [value]="man.name">
+                        {{man.name}}
+                    </option>
+                </select>
+            </mat-form-field>
+        </form>
+        <div *ngIf="toggleField=='searchMode' && showResults==true">
+            <div *ngIf="takeHostSelfieSearch" width="300">
+                <button type="reset" (click)="takeHostSelfie=false;" mat-icon-button color="primary">
+                    <mat-icon>clear</mat-icon>
+                </button>
+                <fileupload fileUrl="product" docId="{{this.myDocId}}"></fileupload>
+            </div>
+            <div *ngIf="showHostSelfieSearch" width="300" class="display" style="background-color: rgb(170,200,200)">
+                <mat-toolbar class="display">
+                    <span class="example-spacer"></span>
+                    <b>{{oneDataDescription.lname}}</b>
+                    <span class="example-spacer"></span>
+                    <button type="reset" (click)="showHostSelfieSearch=false;" mat-icon-button color="primary">
+                        <mat-icon>clear</mat-icon>
+                    </button></mat-toolbar>
+                <mat-grid-list cols="2" rowHeight="350px">
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <img [src]="profileUrl | async" maxwidth="400" height="300" />
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <mat-list>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.category}}:</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.category}}</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.manufacturer}}:</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.scategory}}</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.color}}</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.color}}</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.size}}:</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.size}} inch</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.discount}}:</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.discount}} %</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item><b>{{this._language.langDataFinal.setProduct.price}}:</b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.price}} RDS</mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item *ngIf="oneDataDescription.discount>0"><b>{{this._language.langDataFinal.setProduct.priceDiscount}}: </b>
+                                <span class="example-spacer"></span>
+                                {{oneDataDescription.price-oneDataDescription.price*oneDataDescription.discount/100}}
+                                RDS
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        </mat-list>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+            </div>
+            <div class="example-header">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{this._language.langDataFinal.setProduct.search2}}">
+                </mat-form-field>
+            </div>
+            <div class="example-container mat-elevation-z8">
+                <mat-table [dataSource]="dataSourceSearch" matSort
+                    style="background-color: rgb(190, 220, 220); border-radius: 15px; margin:auto">
+
+                    <ng-container matColumnDef="category">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.category}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.category}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="scategory">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.manufacturer}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.scategory}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lname">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.name}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.lname}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="price">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.price}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.price}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="stock">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.stock}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.stock}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="discount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.discount}} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.discount}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="_id">
+                        <mat-header-cell *matHeaderCellDef>{{this._language.langDataFinal.setProduct.actions}}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip3}}" *ngIf="row.path"
+                                (click)="getPic(row.path);getDoc(row._id);this.showHostSelfieSearch=true;this.takeHostSelfieSearch=false">
+                                <mat-icon color="primary">photo_camera</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip4}}" *ngIf="row.path"
+                                (click)="this.myDocId=row._id;this.showHostSelfieSearch=false; this.takeHostSelfieSearch=true"
+                                class="label-error">
+                                <mat-icon color="primary">add_a_photo</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip5}}" *ngIf="row.path"
+                                (click)="deletePic(row._id);this.showHostSelfieSearch=false;">
+                                <mat-icon color="primary">camera_roll</mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip6}}"
+                                (click)="this.myDocId=row._id;this.takeHostSelfieSearch=true;" class="label-error"
+                                *ngIf="!row.path">
+                                <mat-icon>camera_roll</mat-icon>
+                            </button>
+                            <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip7}}">
+                                <button mat-icon-button (click)="getDoc(row._id); this.toggle('editMode')">
+                                    <mat-icon color="primary">edit</mat-icon>
+                                </button>
+                            </span>
+                            <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip8}}">
+                                <button mat-icon-button (click)="deleteDoc(row._id)">
+                                    <mat-icon color="primary">delete</mat-icon>
+                                </button>
+                            </span>
+                            <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip9}}">
+                                <button mat-icon-button (click)="deleteForeverDoc(row._id); getData();">
+                                    <mat-icon color="ascent">delete</mat-icon>
+                                </button>
+                            </span>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+
+                <mat-paginator #paginatorSearch [length]="dataSourceSearch.filteredData.length" [pageIndex]="0"
+                    [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 50, 75, 100]"
+                    style="background-color: rgb(190, 220, 220); border-radius: 15px; margin:auto"></mat-paginator>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<ng-template #showAddMode>
+    <!--Add page here-->
+    <form #addDataForm="ngForm" (ngSubmit)="setData(addDataForm.value);" novalidate>
+        <mat-error *ngIf="savedChanges">
+            {{this._language.langDataFinal.setProduct.saved}}
+            <label class="small-spacer"></label>
+            <mat-icon (click)="this.addDataForm.reset();savedChanges=false;toggle('searchMode');">clear </mat-icon>
+        </mat-error>
+        <div *ngIf="!savedChanges">
+            <mat-card-actions align="start">
+                <button type="submit" mat-raised-button [disabled]="!addDataForm.valid" color="primary">Add</button>
+                <button type="reset" (click)="this.addDataForm.reset();" mat-raised-button
+                    [disabled]="!addDataForm.valid" color="primary">Clear</button>
+                <span class="med-spacer"></span>
+                <span matTooltip="Search">
+                    <mat-icon color="primary" (click)="toggle('searchMode')">search</mat-icon>
+                </span>
+                <span class="small-spacer"></span>
+                <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip2}}">
+                    <mat-icon color="primary" (click)="getData();toggle('resMode');">cached</mat-icon>
+                </span>
+            </mat-card-actions>
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.category}}</mat-label>
+                <select matNativeControl name="category" id="category" ngModel>
+                    <option value="" selected></option>
+                    <option *ngFor="let cat of searchCategory" [value]="cat.name">
+                        {{cat.name}}
+                    </option>
+                </select>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.categoryEg}}</mat-hint>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.manufacturer}}</mat-label>
+                <select matNativeControl name="scategory" id="scategory" ngModel>
+                    <option value="" selected></option>
+                    <option *ngFor="let man of SearchManufacturer" [value]="man.name">
+                        {{man.name}}
+                    </option>
+                </select>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.manufacturerEg}}</mat-hint>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <textarea matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder1}}" name="tags" id="tags" ngModel required
+                    minlength="1"></textarea>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.eg1}}</mat-hint>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder2}}" name="name" id="name" ngModel required minlength="1">
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.eg2}}</mat-hint>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder3}}" name="sname" id="sname" ngModel>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder4}}" name="lname" id="lname" ngModel>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <textarea matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder5}}" name="descr" id="descr" ngModel></textarea>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.color}}" name="color" id="color" ngModel>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.size}}" name="size" id="size" ngModel>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.price}}" name="price" id="price" ngModel required pattern="[0-9]+">
+            </mat-form-field>
+            <br/>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.shipping}}" name="shipping" id="shipping" ngModel required pattern="[0-9]+">
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.stock}}" name="stock" id="stock" ngModel required required
+                    pattern="[0-9]+">
+                <mat-hint align="eng">{{this._language.langDataFinal.setProduct.eg4}}</mat-hint>
+            </mat-form-field>
+
+        </div>
+    </form>
+</ng-template>
+<ng-template #showEditMode>
+    <!--Edit page here-->
+    <form #editDataForm="ngForm" (ngSubmit)="updateData(editDataForm.value);" novalidate>
+        <input type="hidden" name="_id" id="_id" [ngModel]="myDocData._id" required>
+        <mat-error *ngIf="savedChanges">
+            {{this._language.langDataFinal.setProduct.saved}}
+            <label class="small-spacer"></label>
+            <mat-icon (click)="this.editDataForm.reset();savedChanges=false;toggle('searchMode');">clear </mat-icon>
+        </mat-error>
+        <div *ngIf="!savedChanges">
+            <mat-progress-bar mode="indeterminate" *ngIf="dataLoading"></mat-progress-bar>
+            <mat-error *ngIf="error">{{this._language.langDataFinal.setProduct.error}}: {{errorMessage}}</mat-error>
+            <mat-card-actions align="start">
+                <button type="submit" mat-raised-button [disabled]="!editDataForm.valid || this.editDataForm.pristine"
+                    color="primary">{{this._language.langDataFinal.setProduct.update}}</button>
+                <span class="med-spacer"></span>
+                <span matTooltip="{{this._language.langDataFinal.setProduct.search}}">
+                    <mat-icon color="primary" (click)="toggle('searchMode')">search</mat-icon>
+                </span>
+                <span class="small-spacer"></span>
+                <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip2}}">
+                    <mat-icon color="primary" (click)="toggle('resMode');getData();">cached</mat-icon>
+                </span>
+            </mat-card-actions>
+
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.category}}</mat-label>
+                <select matNativeControl name="category" id="category" [ngModel]="myDocData.category">
+                    <option value="" selected></option>
+                    <option *ngFor="let cat of searchCategory" [value]="cat.name">
+                        {{cat.name}}
+                    </option>
+                </select>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.categoryEg}}</mat-hint>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <mat-label>{{this._language.langDataFinal.setProduct.manufacurer}}</mat-label>
+                <select matNativeControl name="scategory" id="scategory" [ngModel]="myDocData.scategory">
+                    <option value="" selected></option>
+                    <option *ngFor="let man of SearchManufacturer" [value]="man.name">
+                        {{man.name}}
+                    </option>
+                </select>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.manufacturerEg}}</mat-hint>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <textarea matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder1}}" name="tags" id="tags"
+                    [ngModel]="myDocData.tags" required minlength="1"></textarea>
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.eg1}}</mat-hint>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder2}}" name="name" id="name" [ngModel]="myDocData.name" required
+                    minlength="1">
+                <mat-hint align="end">{{this._language.langDataFinal.setProduct.eg2}}</mat-hint>
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder3}}" name="sname" id="sname" [ngModel]="myDocData.sname">
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder4}}" name="lname" id="lname" [ngModel]="myDocData.lname">
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <textarea matInput placeholder="{{this._language.langDataFinal.setProduct.placeholder5}}" name="descr" id="descr"
+                    [ngModel]="myDocData.descr"></textarea>
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.color}}" name="color" id="color" [ngModel]="myDocData.color">
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.size}}" name="size" id="size" [ngModel]="myDocData.size">
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.price}}" name="price" id="price" [ngModel]="myDocData.price" required
+                    pattern="[0-9]+">
+            </mat-form-field>
+            <br/>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.shipping}}" name="shipping" id="shipping" [ngModel]="myDocData.shopping"
+                    required pattern="[0-9]+">
+            </mat-form-field>
+            <span class="example-icon"></span>
+            <mat-form-field>
+                <input matInput placeholder="{{this._language.langDataFinal.setProduct.stock}}" name="stock" id="stock" [ngModel]="myDocData.stock"
+                    required pattern="[0-9]+">
+                <mat-hint align="eng">{{this._language.langDataFinal.setProduct.eg4}}</mat-hint>
+            </mat-form-field>
+        </div>
+    </form>
+</ng-template>
+<ng-template #showResMode>
+    <!--result page here-->
+    <div *ngIf="takeHostSelfie" width="300">
+        <button type="reset" (click)="takeHostSelfie=false;" mat-icon-button color="primary">
+            <mat-icon>clear</mat-icon>
+        </button>
+        <fileupload fileUrl="product" docId="{{this.myDocId}}"></fileupload>
+    </div>
+    <div *ngIf="showHostSelfie" width="300" class="display">
+        <mat-toolbar class="display" style="background-color: rgb(170,200,200)">
+            <span class="example-spacer"></span>
+            <b>{{oneDataDescription.lname}}</b>
+            <span class="example-spacer"></span>
+            <button type="reset" (click)="showHostSelfie=false;" mat-icon-button color="primary">
+                <mat-icon>clear</mat-icon>
+            </button></mat-toolbar>
+        <mat-grid-list cols="2" rowHeight="400px">
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                <img [src]="profileUrl | async" maxwidth="400" height="300" />
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                <mat-list>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.category}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.category}}</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.manufacturer}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.scategory}}</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.color}}</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.color}}</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.size}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.size}} inch</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.discount}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.discount}} %</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item><b>{{this._language.langDataFinal.setProduct.price}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.price}} RDS</mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item *ngIf="oneDataDescription.discount>0"><b>{{this._language.langDataFinal.setProduct.priceDiscount}}: </b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.price-oneDataDescription.price*oneDataDescription.discount/100}} RDS
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                        <b>{{this._language.langDataFinal.setProduct.stock}}:</b>
+                        <span class="example-spacer"></span>
+                        {{oneDataDescription.stock}}
+                    </mat-list-item>
+                </mat-list>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+    </div>
+    <span class="example-icon"></span>
+    <span class="example-icon"></span>
+    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip1}}">
+        <mat-icon color="primary" (click)="toggle('addMode');">add</mat-icon>
+    </span>
+    <span class="example-icon"></span>
+    <span matTooltip="{{this._language.langDataFinal.setProduct.search2}}">
+        <mat-icon color="primary" (click)="toggle('searchMode');">search</mat-icon>
+    </span>
+
+    <div class="example-header">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{this._language.langDataFinal.setProduct.search2}}">
+        </mat-form-field>
+    </div>
+    <div class="example-container mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort
+            style="background-color: rgb(190, 220, 220); border-radius: 15px; margin:auto">
+
+            <ng-container matColumnDef="category">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.category}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.category}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="scategory">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.manufacturer}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.scategory}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="lname">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.name}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.lname}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.price}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.price}} RSD</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stock">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.stock}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.stock}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="discount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{this._language.langDataFinal.setProduct.discount}} </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.discount}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="_id">
+                <mat-header-cell *matHeaderCellDef>{{this._language.langDataFinal.setProduct.actions}}</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip3}}" *ngIf="row.path"
+                        (click)="getPic(row.path);getDoc(row._id);this.showHostSelfie=true; this.takeHostSelfie=false;">
+                        <mat-icon color="primary">photo_camera</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip4}}" *ngIf="row.path"
+                        (click)="this.myDocId=row._id;this.takeHostSelfie=true;this.showHostSelfie=false;"
+                        class="label-error">
+                        <mat-icon color="primary">add_a_photo</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip5}}" *ngIf="row.path"
+                        (click)="deletePic(row._id);this.showHostSelfie=false; this.takeHostSelfie=false;">
+                        <mat-icon color="primary">camera_roll</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="{{this._language.langDataFinal.setProduct.matTooltip6}}"
+                        (click)="this.myDocId=row._id;this.takeHostSelfie=true;this.showHostSelfie=false;"
+                        class="label-error" *ngIf="!row.path">
+                        <mat-icon>camera_roll</mat-icon>
+                    </button>
+                    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip7}}">
+                        <button mat-icon-button (click)="getDoc(row._id); this.toggle('editMode')">
+                            <mat-icon color="primary">edit</mat-icon>
+                        </button>
+                    </span>
+                    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip8}}">
+                        <button mat-icon-button (click)="deleteDoc(row._id)">
+                            <mat-icon color="primary">delete</mat-icon>
+                        </button>
+                    </span>
+                    <span matTooltip="{{this._language.langDataFinal.setProduct.matTooltip9}}">
+                        <button mat-icon-button (click)="deleteForeverDoc(row._id); getData();">
+                            <mat-icon color="ascent">delete</mat-icon>
+                        </button>
+                    </span>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 50, 75, 100]"
+            style="background-color: rgb(190, 220, 220); border-radius: 15px;"></mat-paginator>
+    </div>
+</ng-template>

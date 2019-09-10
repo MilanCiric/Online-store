@@ -1,0 +1,10 @@
+.accordicon{
+    width:80%;
+    height:100%;
+    margin: auto;
+}
+.panel{
+    background-color: rgb(190, 220, 220); 
+    border-radius: 10px;
+    border: 1px solid #eeeeee;
+}

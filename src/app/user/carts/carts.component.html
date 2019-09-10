@@ -1,0 +1,117 @@
+<header pageTitle="{{this._language.langDataFinal.carts.pageTitle}}" iconTitle="shopping_cart"
+    helpTitle="Shopping_cart_help"></header>
+<mat-card class="matCard">
+    {{pageTitle}}
+    <mat-error *ngIf="savedChanges" class="centar">
+        {{this._language.langDataFinal.carts.updated}}
+        <mat-icon (click)="savedChanges=!savedChanges" color="primary">close</mat-icon>
+        <span class="med-spacer"></span>
+    </mat-error>
+    <mat-card-content *ngIf='!this.user.suspended else showWarning'>
+        <mat-list-item>
+            <mat-grid-list cols="8" rowHeight="25px">
+                <mat-grid-tile [colspan]="3" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.productName}}</b><span class="example-spacer"></span>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.counts}}</b>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.price}}</b>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.discount}}</b>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.shipping}}</b>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <b>{{this._language.langDataFinal.carts.total}}</b>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-list-item>
+        <div *ngIf="this.exists">
+            <mat-list-item *ngFor="let item of shoppingCart">
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        {{item.lname}}
+                        <span class="example-spacer"></span>
+                        <mat-icon (click)="deleteFromCart(item.id)" color="accent">delete</mat-icon>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.count}}
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.price}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.discount}} %
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        {{item.shipping}} RSD
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{item.total}} RSD</b>
+                    </mat-grid-tile>
+                    <mat-divider></mat-divider>
+                </mat-grid-list>
+                <mat-divider></mat-divider>
+
+            </mat-list-item>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.carts.grandTotal}}</b><span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{total}} RSD</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <mat-divider style="border:1px solid black"></mat-divider>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-grid-list cols="8" rowHeight="25px">
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <b>{{this._language.langDataFinal.carts.grandTotal2}}</b><span class="example-spacer"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <b>{{this.cartMembers[0].grandTotal}} RSD</b>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-list-item>
+        </div>
+        <br><br>
+        <mat-chip-list>
+            <span class="example-spacer"></span>
+            <mat-chip color="primary" selected routerLink="/product">{{this._language.langDataFinal.carts.continue}}
+            </mat-chip>
+            <span class="example-icon"></span>
+            <mat-chip color="accent" selected (click)="updateCart();savedChanges=true">
+                {{this._language.langDataFinal.carts.updateCart}}</mat-chip>
+            <span class="example-icon"></span>
+            <mat-chip color="accent" selected (click)="orderProducts();">{{this._language.langDataFinal.carts.finish}}
+            </mat-chip>
+        </mat-chip-list>
+
+    </mat-card-content>
+    <ng-template #showWarning>
+        <h3 style="color:red">{{this._language.langDataFinal.carts.problem}}</h3>
+
+    </ng-template>
+</mat-card>
